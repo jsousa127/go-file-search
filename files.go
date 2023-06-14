@@ -34,10 +34,12 @@ func searchFile(path, searchString string) (bool, error) {
 }
 
 func searchDir(ctx context.Context, root, searchString string) ([]string, error) {
-	g, ctx := errgroup.WithContext(ctx)
-	g.SetLimit(runtime.NumCPU())
+	numCpu := runtime.NumCPU()
 
-	resultChan := make(chan string, 1)
+	g, ctx := errgroup.WithContext(ctx)
+	g.SetLimit(numCpu)
+
+	resultChan := make(chan string, numCpu)
 
 	checkFile := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
