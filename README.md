@@ -1,2 +1,8 @@
 # go-file-search
-Search files in directory containing string 
+Search directory for files containing a keyword
+
+## Build
+`go build`
+
+## Run
+`./file-search <PATH> <SEARCH_STRING>`
