@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"io"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -23,7 +24,10 @@ func searchFile(path, searchString string) (bool, error) {
 	for {
 		line, err := reader.ReadString('\n')
 		if err != nil {
-			break
+			if err == io.EOF {
+				break
+			}
+			return false, err
 		}
 
 		if strings.Contains(line, searchString) {
@@ -44,6 +48,10 @@ func searchDir(ctx context.Context, root, searchString string) ([]string, error)
 	checkFile := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
+		}
+
+		if ctx.Err() != nil {
+			return ctx.Err()
 		}
 
 		if !info.Mode().IsRegular() || info.IsDir() {
