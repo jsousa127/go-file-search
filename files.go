@@ -86,7 +86,7 @@ func searchDir(ctx context.Context, root, searchString string) ([]string, error)
 		close(resultChan)
 	}()
 
-	var results []string
+	results := []string{}
 	for path := range resultChan {
 		results = append(results, path)
 	}
